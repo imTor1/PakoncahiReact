@@ -36,7 +36,7 @@ function SignInPage() {
         setIsLoading(false); // End loading state
         if (data.status) {
           alert(data.message);
-          navigate('/admin');
+          navigate('/AddEmployee');
         } else {
           alert(data.message); // Show error message if login fails
         }
