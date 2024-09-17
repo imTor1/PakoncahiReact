@@ -10,40 +10,42 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-  
 
-function SignUpPage() {
+function SignInPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = React.useState({
     username: '',
-    password: '',
-    firstName: '',
-    lastName: ''
+    password: ''
   });
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    // ส่งข้อมูลฟอร์มไปยัง API สำหรับการลงทะเบียน
-    fetch('http://localhost:3000/api/register', {
+    setIsLoading(true); 
+
+    // Sending login data to API
+    fetch('http://localhost:4000/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.status) {
-        alert(data.message);
-        navigate('/Sign_in');  // นำทางไปยังหน้า Sign In หลังจากลงทะเบียนสำเร็จ
-      } else {
-        alert('Registration failed');
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        setIsLoading(false); // End loading state
+        if (data.status) {
+          alert(data.message);
+          navigate('/admin');
+        } else {
+          alert(data.message); // Show error message if login fails
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false); // End loading state
+        console.error('Error:', error);
+        alert('An error occurred while logging in. Please try again later.');
+      });
   };
 
   const handleChange = (e) => {
@@ -69,7 +71,7 @@ function SignUpPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign Up
+          Sign In
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -88,48 +90,27 @@ function SignUpPage() {
             margin="normal"
             required
             fullWidth
-            id="firstName"
-            label="First Name"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            autoComplete="given-name"
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="lastName"
-            label="Last Name"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            autoComplete="family-name"
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
             value={formData.password}
             onChange={handleChange}
-            autoComplete="new-password"
+            autoComplete="current-password"
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isLoading}
           >
-            Sign Up
+            {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" onClick={() => navigate('/Sign_in')} variant="body2">
-                {"Already have an account? Sign In"}
+              <Link href="#" onClick={() => navigate('/sign_up')} variant="body2">
+                {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
@@ -139,4 +120,4 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default SignInPage;

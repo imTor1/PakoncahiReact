@@ -1,15 +1,20 @@
 import './App.css';
 import SigninPage from './Sign_in';
 import SignUpPage from './Sign_up';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AddEmployee from './admin';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Routes>
+          <Route path='/' element={<SigninPage />} />
           <Route path='/Sign_in' element={<SigninPage />} />
           <Route path='/Sign_up' element={<SignUpPage />} />
+          <Route path='/admin' element={<AddEmployee />} />
+          <Route path='*' element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </div>

@@ -3,14 +3,14 @@ const mysql = require('mysql2')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 3000
-
+s
 app.use(bodyParser.json())
 
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "123_321",
-    database: "shopdee"
+    database: "tordb"
 });
 
 db.connect((err) => {
@@ -21,9 +21,9 @@ db.connect((err) => {
     console.log('Connected to MySQL');
 });
 
-app.post('/api/register', function(req, res){  
+app.post('/Register', function(req, res){  
     const { username, password, firstName, lastName } = req.body;
-    const sql = `INSERT INTO customer (username, password, 
+    const sql = `INSERT INTO admin (username, password, 
                 firstName, lastName) VALUES (?, ?, ?, ?)`;
     
     db.query(sql, [username, password, firstName, lastName], 
@@ -37,9 +37,9 @@ app.post('/api/register', function(req, res){
     )
 });
 
-app.post('/api/login', function(req, res) {
+app.post('/Login', function(req, res) {
     const { username, password } = req.body;
-    const sql = `SELECT * FROM customer WHERE username = ? AND password = ?`;
+    const sql = `SELECT * FROM admin WHERE username = ? AND password = ?`;
 
     db.query(sql, [username, password], function(err, result) {
         if (err) {

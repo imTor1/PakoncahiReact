@@ -10,19 +10,21 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+  
 
-function SignInPage() {
+function SignUpPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = React.useState({
     username: '',
-    password: ''
+    password: '',
+    firstName: '',
+    lastName: ''
   });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // ส่งข้อมูลเข้าสู่ระบบไปยัง API
-    fetch('http://localhost:3000/api/login', {
+    
+    fetch('http://localhost:4000/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,10 +35,9 @@ function SignInPage() {
     .then(data => {
       if (data.status) {
         alert(data.message);
-        // นำทางไปยังหน้า Dashboard หรือหน้าที่ต้องการหลังเข้าสู่ระบบสำเร็จ
-        navigate('/dashboard');
+        navigate('/Sign_in');
       } else {
-        alert(data.message); // แสดงข้อความผิดพลาดหากเข้าสู่ระบบล้มเหลว
+        alert('Registration failed');
       }
     })
     .catch((error) => {
@@ -63,11 +64,8 @@ function SignInPage() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
-          Sign In
+          Sign Up
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -86,13 +84,35 @@ function SignInPage() {
             margin="normal"
             required
             fullWidth
+            id="firstname"
+            label="Firstname"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            autoComplete="given-name"
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="lastName"
+            label="Lasname"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            autoComplete="family-name"
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
             name="password"
             label="Password"
             type="password"
             id="password"
             value={formData.password}
             onChange={handleChange}
-            autoComplete="current-password"
+            autoComplete="new-password"
           />
           <Button
             type="submit"
@@ -100,12 +120,12 @@ function SignInPage() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Sign Up
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" onClick={() => navigate('/Sign_up')} variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="#" onClick={() => navigate('/Sign_in')} variant="body2">
+                {"Already have an account? Sign In"}
               </Link>
             </Grid>
           </Grid>
@@ -115,4 +135,4 @@ function SignInPage() {
   );
 }
 
-export default SignInPage;
+export default SignUpPage;
